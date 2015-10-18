@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from planeta import Planeta
-
+import matplotlib.pyplot as plt
 
 condicion_inicial = [10, 0, 0, XXX]
 
