@@ -30,8 +30,9 @@ class Planeta(object):
         primer orden.
         '''
         x, y, vx, vy = self.y_actual
-        # fx = ...
-        # fy = ...
+        r=np.sqrt(x**2+y**2)
+        fx = x*G*M*((-1/r**3)+(2*self.alpha/r**4))
+        fy = y*G*M*((-1/r**3)+(2*self.alpha/r**4))
         return [vx, vy, fx, fy]
 
     def avanza_euler(self, dt):
