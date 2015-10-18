@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 from scipy.integrate import ode
-
+G=1
+M=1
+m=1
 class Planeta(object):
     '''
     Complete el docstring.
@@ -45,32 +47,43 @@ class Planeta(object):
         vx1=vx0+dt*f[2]
         vy1=vy0+dt*f[3]
         self.y_actual=[x1,y1,vx1,vy1]
+        self.t_actual+=dt
 
     def avanza_rk4(self, dt):
         '''
         Similar a avanza_euler, pero usando Runge-Kutta 4.
         '''
-        vx, vy, fx, fy = self.ecuacion_de_movimiento
-        solver=ode(self.ecuacion_de_movimiento)
+        f = self.ecuacion_de_movimiento
+        solver=ode(f)
         solver.set_integrator('dopri5', atol=1E-6, rtol=1E-4)
         solver.set_initial_value(self.y_actual)
         solver.integrate(self.t_actual+dt)
         self.y_actual=[solver.y[0],solver.y[1],solver.y[2],solver.y[3]]
+        self.t_actual+=dt
 
-    def avanza_verlet(self, dt):
+    def avanza_verlet(self, dt, xp, yp):
         '''
         Similar a avanza_euler, pero usando Verlet.
+        xp e yp son las posiciones previas.
         '''
+        x0, y0, vx0, vy0 = self.y_actual
         vx, vy, fx, fy = self.ecuacion_de_movimiento
-        pass
+        Xn=2*x0-xp+dt**2*fx
+        Yn=2*y0-yp+dt**2*fy
+        Vxn=(Xn-xp)/2*dt
+        Vyn=(Yn-yp)/2*dt
+        self.y_actual=[Xn,Yn,Vxn,Vyn]
+        self.t_actual+=dt
 
     def energia_total(self):
         '''
-        Calcula la enérgía total del sistema en las condiciones actuales.
+        Calcula la energía total del sistema en las condiciones actuales.
         '''
         x, y, vx, vy = self.y_actual
         r=np.sqrt(x**2+y**2)
-        U=-1/r+1/r**2
-        return (U)
+        potencial=G*M*m*(-1/r+self.alpha*1/r**2)
+        cinetica=(vx**2+vy**2)*m/2
+        energia=potencial+cinetica
+        return (energia)
 
 
