@@ -21,4 +21,17 @@ y = np.zeros(N_pasos)
 vx = np.zeros(N_pasos)
 vy = np.zeros(N_pasos)
 
-energia = np.zeros(N_pasos)
+E = np.zeros(N_pasos)
+
+#Integración
+[x[0],y[0],vx[0],vy[0]] = condicion_inicial
+E[0] = p.energia_total()
+for i in range(1,N_pasos):
+    p.avanza_euler(dt)
+    xi, yi, vxi, vyi = p.y_actual
+    x[i] = xi
+    y[i] = yi
+    vx[i] = vxi
+    vy[i] = vyi
+    E[i] = p.energia_total()
+
