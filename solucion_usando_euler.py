@@ -7,14 +7,14 @@ import numpy as np
 
 #Main
 
-condicion_inicial = [10.0, 0.0, 0.0, 0.15] #Vy inicial = 0.15
+condicion_inicial = np.array([10.0, 0.0, 0.0, 0.25]) #Vy inicial = 0.15
 
 p = Planeta(condicion_inicial)
 
 #Inicalización
-t_final = 150.0 #spaceholder
+t_final = 900.0 #5 vueltas con euler
 dt = 0.1
-N_pasos= t_final/dt
+N_pasos= int(t_final/dt)
 
 x = np.zeros(N_pasos)
 y = np.zeros(N_pasos)
@@ -35,3 +35,21 @@ for i in range(1,N_pasos):
     vy[i] = vyi
     E[i] = p.energia_total()
 
+#Gráfico
+fig=plt.figure(1)
+plt.subplot(2, 1, 1)
+fig.subplots_adjust(hspace=.5)
+plt.plot(x , y, label = "Trayectoria")
+plt.title("Trayectoria bajo un potencial central, Euler")
+plt.xlabel("X")
+plt.ylabel("Y")
+
+t_values = np.linspace(1, t_final, N_pasos)
+plt.subplot(2, 1, 2)
+plt.plot(t_values, E)
+plt.title("Energia en cada instante")
+plt.xlabel("Tiempo")
+plt.ylabel("Energia")
+
+plt.savefig("euler.jpg")
+plt.show()
