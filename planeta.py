@@ -16,7 +16,7 @@ class Planeta(object):
         instancias de una clase.
 
         Ej. de uso:
-        >> mercurio = Planeta([x0, y0, vx0, vy0])
+        >> mercurio = Planeta(np.array([x0, y0, vx0, vy0])
         >> print(mercurio.alpha)
         >> 0.
         '''
@@ -24,16 +24,23 @@ class Planeta(object):
         self.t_actual = 0.
         self.alpha = alpha
 
-    def ecuacion_de_movimiento(self):
+    def ecuacion_de_movimiento(self,datos=np.array([0,0,0,0])):
         '''
         Implementa la ecuación de movimiento, como sistema de ecuaciónes de
-        primer orden.
+        primer orden. Recibe el array datos, que se suman a los valores de
+        x, y, vx, y vy (esto hace rk4 más simple)
+        Retorna un np.array por conveniencia.
         '''
         x, y, vx, vy = self.y_actual
-        r=np.sqrt(x**2+y**2)
-        fx = x*G*M*((-1/r**3)+(2*self.alpha/r**4))
-        fy = y*G*M*((-1/r**3)+(2*self.alpha/r**4))
-        return [vx, vy, fx, fy]
+        
+        x += datos[0]
+        y += datos[1]
+        vx += datos[2]
+        vy += datos[3]
+        
+        fx = x*G*M*((-1/np.sqrt(x**2+y**2)**3) + (2*self.alpha/(x**2+y**2)**2))
+        fy = y*G*M*((-1/np.sqrt(x**2+y**2)**3) + (2*self.alpha/(x**2+y**2)**2))
+        return np.array([vx, vy, fx, fy])
 
     def avanza_euler(self, dt):
         '''
@@ -41,26 +48,26 @@ class Planeta(object):
         en un intervalo de tiempo dt usando el método de Euler explícito. El
         método no retorna nada, pero re-setea los valores de self.y_actual.
         '''
-        x0, y0, vx0, vy0 = self.y_actual
-        f=self.ecuacion_de_movimiento
-        x1=x0+dt*f[0]
-        y1=y0+dt*f[1]
-        vx1=vx0+dt*f[2]
-        vy1=vy0+dt*f[3]
-        self.y_actual=[x1,y1,vx1,vy1]
-        self.t_actual+=dt
+        yn = self.y_actual + dt * (self.ecuacion_de_movimiento())
+        self.y_actual = yn
+        self.t_actual += dt
+        pass
 
     def avanza_rk4(self, dt):
         '''
         Similar a avanza_euler, pero usando Runge-Kutta 4.
         '''
-        f = self.ecuacion_de_movimiento
-        solver=ode(f)
-        solver.set_integrator('dopri5', atol=1E-6, rtol=1E-4)
-        solver.set_initial_value(self.y_actual)
-        solver.integrate(self.t_actual+dt)
-        self.y_actual=[solver.y[0],solver.y[1],solver.y[2],solver.y[3]]
-        self.t_actual+=dt
+        k1 = self.ecuacion_de_movimiento()
+        k2 = self.ecuacion_de_movimiento(dt/2. * k1)
+        k3 = self.ecuacion_de_movimiento(dt/2. * k2)
+        k4 = self.ecuacion_de_movimiento(dt * k3)
+
+        yn = self.y_actual + dt/6. * (k1 + 2*k2 + 2*k3 + k4)
+
+        self.y_actual = yn
+        self.t_actual += dt
+        pass
+        
 
     def avanza_verlet(self, dt, xp, yp):
         '''
