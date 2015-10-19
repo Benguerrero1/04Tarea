@@ -3,11 +3,22 @@
 
 from planeta import Planeta
 import matplotlib.pyplot as plt
+import numpy as np
 
-condicion_inicial = [10, 0, 0, XXX]
+#Main
+
+condicion_inicial = [10.0, 0.0, 0.0, 0.15] #Vy inicial = 0.15
 
 p = Planeta(condicion_inicial)
 
-'''
-Complete el código a continuación.
-'''
+#Inicalización
+t_final = 150.0 #spaceholder
+dt = 0.1
+N_pasos= t_final/dt
+
+x = np.zeros(N_pasos)
+y = np.zeros(N_pasos)
+vx = np.zeros(N_pasos)
+vy = np.zeros(N_pasos)
+
+energia = np.zeros(N_pasos)
