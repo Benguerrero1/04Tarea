@@ -1,5 +1,5 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 
 from planeta import Planeta
 import matplotlib.pyplot as plt
@@ -27,7 +27,7 @@ E = np.zeros(N_pasos)
 [x[0],y[0],vx[0],vy[0]] = condicion_inicial
 E[0] = p.energia_total()
 for i in range(1,N_pasos):
-    p.avanza_euler(dt)
+    p.avanza_rk4(dt)
     xi, yi, vxi, vyi = p.y_actual
     x[i] = xi
     y[i] = yi
@@ -40,7 +40,7 @@ fig=plt.figure(1,figsize=(8,6))
 plt.subplot(2, 1, 1)
 fig.subplots_adjust(hspace=.5)
 plt.plot(x , y, label = "Trayectoria")
-plt.title("Trayectoria bajo un potencial central, Euler")
+plt.title("Trayectoria bajo un potencial central, RK4")
 plt.xlabel("X")
 plt.ylabel("Y")
 
@@ -51,5 +51,5 @@ plt.title("Energia en cada instante")
 plt.xlabel("Tiempo")
 plt.ylabel("Energia")
 
-plt.savefig("euler.jpg")
+plt.savefig("RK4.jpg")
 plt.show()

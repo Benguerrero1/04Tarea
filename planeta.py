@@ -37,9 +37,10 @@ class Planeta(object):
         y += datos[1]
         vx += datos[2]
         vy += datos[3]
+        r=np.sqrt(x**2+y**2)
         
-        fx = x*G*M*((-1/np.sqrt(x**2+y**2)**3) + (2*self.alpha/(x**2+y**2)**2))
-        fy = y*G*M*((-1/np.sqrt(x**2+y**2)**3) + (2*self.alpha/(x**2+y**2)**2))
+        fx = x*G*M*((-1/r**3) + (2*self.alpha/r**4))
+        fy = y*G*M*((-1/r**3) + (2*self.alpha/r**4))
         return np.array([vx, vy, fx, fy])
 
     def avanza_euler(self, dt):
@@ -82,6 +83,7 @@ class Planeta(object):
         Vyn=(Yn-yp)/2*dt
         self.y_actual=[Xn,Yn,Vxn,Vyn]
         self.t_actual+=dt
+        pass
 
     def energia_total(self):
         '''
