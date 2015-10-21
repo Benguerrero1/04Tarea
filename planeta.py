@@ -7,26 +7,18 @@ M=1
 m=1
 class Planeta(object):
     '''
-    Complete el docstring.
+    Define un planeta que orbita alrededor del Sol en una orbita cercana,
+    por lo que cumple la ecuacion modificada de la energia potencal gravitatoria.
     '''
 
     def __init__(self, condicion_inicial, alpha=0):
-        '''
-        __init__ es un método especial que se usa para inicializar las
-        instancias de una clase.
-
-        Ej. de uso:
-        >> mercurio = Planeta(np.array([x0, y0, vx0, vy0])
-        >> print(mercurio.alpha)
-        >> 0.
-        '''
         self.y_actual = condicion_inicial
         self.t_actual = 0.
         self.alpha = alpha
 
     def ecuacion_de_movimiento(self,datos=np.array([0,0,0,0])):
         '''
-        Implementa la ecuación de movimiento, como sistema de ecuaciónes de
+        Implementa la ecuacion de movimiento, como sistema de ecuaciones de
         primer orden. Recibe el array datos, que se suman a los valores de
         x, y, vx, y vy (esto hace rk4 más simple)
         Retorna un np.array por conveniencia.
