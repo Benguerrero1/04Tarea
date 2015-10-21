@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from planeta import Planeta
@@ -7,7 +6,7 @@ import numpy as np
 
 #Main
 
-condicion_inicial = np.array([10.0, 0.0, 0.0, 0.25]) #Vy inicial = 0.15
+condicion_inicial = np.array([10.0, 0.0, 0.0, 0.25]) #Vy inicial = 0.25
 
 p = Planeta(condicion_inicial)
 
@@ -23,9 +22,10 @@ vy = np.zeros(N_pasos)
 
 E = np.zeros(N_pasos)
 
-#Integración
 [x[0],y[0],vx[0],vy[0]] = condicion_inicial
 E[0] = p.energia_total()
+
+#Integración
 for i in range(1,N_pasos):
     p.avanza_euler(dt)
     xi, yi, vxi, vyi = p.y_actual

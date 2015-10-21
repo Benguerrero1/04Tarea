@@ -75,14 +75,13 @@ class Planeta(object):
         Similar a avanza_euler, pero usando Verlet.
         xp e yp son las posiciones previas.
         '''
+        P_previa = np.array([xp, yp])
         x0, y0, vx0, vy0 = self.y_actual
-        vx, vy, fx, fy = self.ecuacion_de_movimiento
-        Xn=2*x0-xp+dt**2*fx
-        Yn=2*y0-yp+dt**2*fy
-        Vxn=(Xn-xp)/2*dt
-        Vyn=(Yn-yp)/2*dt
-        self.y_actual=[Xn,Yn,Vxn,Vyn]
-        self.t_actual+=dt
+        P_actual = np.array([x0, y0])
+        Pn = 2 * P_actual - P_previa + dt**2 * self.ecuacion_de_movimiento()[2:]
+        Vn=(Pn - P_previa) / 2 * dt
+        self.y_actual = np.array([Pn[0], Pn[1], Vn[0], Vn[1]])
+        self.t_actual += dt
         pass
 
     def energia_total(self):
